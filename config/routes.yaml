@@ -7,3 +7,7 @@ controllers:
 app_index:
     path: /
     controller: App\Controller\IndexController::index
+
+product_single:
+    path: /product/{slug}
+    controller: App\Controller\IndexController::product

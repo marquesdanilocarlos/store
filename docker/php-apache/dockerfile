@@ -5,8 +5,8 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 #INI-Files
-COPY ./opcache.ini "$PHP_INI_DIR/conf.d/docker-php-ext-opcache.ini"
-COPY ./xdebug.ini "$PHP_INI_DIR/conf.d/99-xdebug.ini"
+COPY ./php-apache/opcache.ini "$PHP_INI_DIR/conf.d/docker-php-ext-opcache.ini"
+COPY ./php-apache/xdebug.ini "$PHP_INI_DIR/conf.d/99-xdebug.ini"
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 #Install Packages
@@ -15,7 +15,11 @@ RUN docker-php-ext-configure intl
 RUN docker-php-ext-configure gd '--with-jpeg' '--with-freetype'
 RUN docker-php-ext-install intl opcache pdo_mysql zip gd
 RUN pecl install xdebug
+
+ADD ./apache.conf /etc/apache2/sites-enabled/000-default.conf
+
 RUN a2enmod rewrite
+RUN a2enmod proxy_fcgi
 
 #INSTALL APCU
 RUN pecl install apcu-5.1.22 && docker-php-ext-enable apcu
