@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  php-apache:
+    container_name: "${CONTAINER_NAME_PREFIX}-apache-php"
+    build: ./php-apache
+    volumes:
+      - ${PATH_TO_SYMFONY_PROJECT}:/var/www/html
+    ports:
+      - "8000:80"
+
+  db:
+    container_name: "${CONTAINER_NAME_PREFIX}-mysql"
+    image: mysql:${MYSQL_VERSION:-latest}
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+    volumes:
+      - ${PATH_TO_DB_DATA}:/var/lib/mysql:rw
+    ports:
+      - "3306:3306"
+
+  mailer:
+    container_name: "${CONTAINER_NAME_PREFIX}-mailer"
+    image: schickling/mailcatcher
+    ports:
+      - "2025:1025"
+      - "2080:1080"
