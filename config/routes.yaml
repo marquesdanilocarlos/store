@@ -4,6 +4,6 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-index:
+app_index:
     path: /
     controller: App\Controller\IndexController::index

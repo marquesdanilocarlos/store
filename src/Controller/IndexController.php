@@ -2,12 +2,18 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
-class IndexController
+class IndexController extends AbstractController
 {
-    public function index(): Response
+    #[Route('/', name: 'app_index')]
+    public function index(): JsonResponse
     {
-        return new Response("Meu primeiro controller");
+        return $this->json([
+            'message' => 'Meu primeiro controller!',
+            'path' => 'src/Controller/IndexController.php',
+        ]);
     }
 }
