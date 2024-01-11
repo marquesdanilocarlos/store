@@ -2,60 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\Product;
-use App\Repository\ProductRepository;
-use DateTime;
-use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-    public function __construct(
-        private EntityManagerInterface $entityManager,
-        private ProductRepository $productRepository
-    ) {
-    }
 
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {
-        /*Inclusão
-         * $product = new Product(
-            'Primeiro produto',
-            'Descrição do primeiro produto',
-            'Informações do primeiro produto',
-            39.90,
-            'primeiro-produto',
-            new DateTimeImmutable('now')
-        );
-
-        $this->entityManager->persist($product);
-        $this->entityManager->flush();*/
-
-        /*Atualização
-         *
-        $product->setName('Primeiro produto com nome atualizado');
-        $product->setUpdatedAt(new DateTimeImmutable('now'));
-        $this->entityManager->flush();*/
-
-        /*Deleção
-         * $this->entityManager->remove($product);
-        $this->entityManager->flush();*/
-
-
-        $products = $this->productRepository->findAll();
-        dump($products);
-        $product = $this->productRepository->find(2);
-        dump($product);
-        $product = $this->productRepository->findBy(['slug' => 'primeiro-produto']);
-        dump($product);
-        $product = $this->productRepository->findOneByPrice(39);
-        dump($product);
-
         $name = "Danilo Marques";
         return $this->render('index.html.twig', compact('name'));
     }
