@@ -6,6 +6,7 @@ services:
     build:
       context: './'
       dockerfile: './php-apache/dockerfile'
+    restart: always
     working_dir: /var/www/html
     extra_hosts:
       - host.docker.internal:host-gateway
@@ -29,6 +30,7 @@ services:
 
   mailer:
     container_name: "${CONTAINER_NAME_PREFIX}-mailer"
+    restart: always
     image: schickling/mailcatcher
     ports:
       - "2025:1025"

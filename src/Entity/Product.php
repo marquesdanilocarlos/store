@@ -15,26 +15,30 @@ class Product
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $description = null;
+    public function __construct(
+        #[ORM\Column(length: 255)]
+        private ?string $name = null,
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $body = null;
+        #[ORM\Column(length: 255)]
+        private ?string $description = null,
 
-    #[ORM\Column]
-    private ?int $price = null;
+        #[ORM\Column(type: Types::TEXT)]
+        private ?string $body = null,
 
-    #[ORM\Column(length: 255)]
-    private ?string $slug = null;
+        #[ORM\Column]
+        private ?int $price = null,
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+        #[ORM\Column(length: 255)]
+        private ?string $slug = null,
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
+        #[ORM\Column]
+        private ?\DateTimeImmutable $createdAt = null,
+
+        #[ORM\Column(nullable: true)]
+        private ?\DateTimeImmutable $updatedAt = null,
+    ) {
+    }
 
     public function getId(): ?int
     {
