@@ -36,15 +36,25 @@ class IndexController extends AbstractController
         $this->entityManager->persist($product);
         $this->entityManager->flush();*/
 
-        $product = $this->productRepository->find(1);
         /*Atualização
          *
         $product->setName('Primeiro produto com nome atualizado');
         $product->setUpdatedAt(new DateTimeImmutable('now'));
         $this->entityManager->flush();*/
 
-        $this->entityManager->remove($product);
-        $this->entityManager->flush();
+        /*Deleção
+         * $this->entityManager->remove($product);
+        $this->entityManager->flush();*/
+
+
+        $products = $this->productRepository->findAll();
+        dump($products);
+        $product = $this->productRepository->find(2);
+        dump($product);
+        $product = $this->productRepository->findBy(['slug' => 'primeiro-produto']);
+        dump($product);
+        $product = $this->productRepository->findOneByPrice(39);
+        dump($product);
 
         $name = "Danilo Marques";
         return $this->render('index.html.twig', compact('name'));
