@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Repository\ProductRepository;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,14 +15,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private ProductRepository $productRepository
     ) {
     }
 
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {
-        $product = new Product(
+        /*$product = new Product(
             'Primeiro produto',
             'Descrição do primeiro produto',
             'Informações do primeiro produto',
@@ -31,6 +33,11 @@ class IndexController extends AbstractController
         );
 
         $this->entityManager->persist($product);
+        $this->entityManager->flush();*/
+
+        $product = $this->productRepository->find(1);
+        $product->setName('Primeiro produto com nome atualizado');
+        $product->setUpdatedAt(new DateTimeImmutable('now'));
         $this->entityManager->flush();
 
         $name = "Danilo Marques";
