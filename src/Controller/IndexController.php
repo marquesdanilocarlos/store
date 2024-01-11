@@ -9,14 +9,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-   // #[Route('/', name: 'app_index')]
+    #[Route('/', name: 'app_index')]
     public function index(): Response
     {
         $name = 'Danilo Marques';
         return $this->render('index.html.twig', compact('name'));
     }
 
-    //#[Route('/product/{slug}', name: 'product_single')]
+    #[Route('/product/{slug}', name: 'product_single')]
     public function product(string $slug): Response
     {
         return $this->render('product/single.html.twig', compact('slug'));

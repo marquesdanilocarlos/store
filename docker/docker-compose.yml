@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 services:
   php-apache:
@@ -6,6 +6,9 @@ services:
     build:
       context: './'
       dockerfile: './php-apache/dockerfile'
+    working_dir: /var/www/html
+    extra_hosts:
+      - host.docker.internal:host-gateway
     volumes:
       - ${PATH_TO_SYMFONY_PROJECT}:/var/www/html
     ports:
