@@ -23,7 +23,8 @@ class IndexController extends AbstractController
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {
-        /*$product = new Product(
+        /*Inclusão
+         * $product = new Product(
             'Primeiro produto',
             'Descrição do primeiro produto',
             'Informações do primeiro produto',
@@ -36,8 +37,13 @@ class IndexController extends AbstractController
         $this->entityManager->flush();*/
 
         $product = $this->productRepository->find(1);
+        /*Atualização
+         *
         $product->setName('Primeiro produto com nome atualizado');
         $product->setUpdatedAt(new DateTimeImmutable('now'));
+        $this->entityManager->flush();*/
+
+        $this->entityManager->remove($product);
         $this->entityManager->flush();
 
         $name = "Danilo Marques";
