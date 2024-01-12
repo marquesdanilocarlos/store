@@ -32,34 +32,30 @@ class ProductController extends AbstractController
     }
 
     #[Route('/create', name: 'create_products', methods: ['GET'])]
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        $productForm = $this->createForm(ProductType::class, new Product());
+        $productForm = $this->createForm(ProductType::class);
         return $this->render('admin/product/create.html.twig', compact('productForm'));
     }
 
     #[Route('/store', name: 'store_products', methods: ['POST'])]
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): Response
     {
         try {
-            $data = $request->request->all();
-            $product = new Product(
-                $data['name'],
-                $data['description'],
-                $data['body'],
-                $data['price'],
-                $this->slugger->slug($data['name']),
-                new \DateTimeImmutable('now')
-            );
+            $productForm = $this->createForm(ProductType::class);
+            $productForm->handleRequest($request);
 
+            if (!$productForm->isSubmitted()) {
+                return $this->render('admin/product/create.html.twig', compact('productForm'));
+            }
+
+            $product = $productForm->getData();
             $this->entityManager->persist($product);
             $this->entityManager->flush();
-
-            $this->addFlash('success', 'Produto criado com sucesso!');
         } catch (Exception $e) {
             throw $e;
         }
-
+        $this->addFlash('success', 'Produto criado com sucesso!');
         return $this->redirectToRoute('admin_index_products');
     }
 

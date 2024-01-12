@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -32,7 +33,7 @@ class Product
         #[ORM\Column(length: 255)]
         private ?string $slug = null,
         #[ORM\Column]
-        private ?\DateTimeImmutable $createdAt = null,
+        private ?\DateTimeImmutable $createdAt = new \DateTimeImmutable(),
         #[ORM\Column(nullable: true)]
         private ?\DateTimeImmutable $updatedAt = null
     ) {
