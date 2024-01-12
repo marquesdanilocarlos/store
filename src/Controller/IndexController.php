@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Address;
+use App\Entity\Order;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,31 +23,15 @@ class IndexController extends AbstractController
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {
-        /*$user = new User(
-            'Danilo',
-            'Marques',
-            'marquesdanilocarlos@gmail.com',
-            'a654321'
-        );
-        $this->entityManager->persist($user);
+        $user = $this->userRepository->find(3);
+        $orders = $user->getOrders();
 
-        $address = new Address(
-            'QA 13 MR Casa',
-            '08',
-            'Setor Sul',
-            'Planaltina',
-            'GO',
-            '73753-113'
-        );
-
-        $address->setUser($user);
-        $this->entityManager->persist($address);
+        /*$order = new Order($user, 'CODIGO_DA_COMPRA', 'ITENS');
+        $this->entityManager->persist($order);
         $this->entityManager->flush();*/
 
-        $user = $this->userRepository->find(3);
-
         $name = "Danilo Marques";
-        return $this->render('index.html.twig', compact('name', 'user'));
+        return $this->render('index.html.twig', compact('name', 'user', 'orders'));
     }
 
     #[Route('/product/{slug}', name: 'product_single')]
