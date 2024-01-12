@@ -15,6 +15,8 @@ class Product
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'product')]
+    private ?Category $category = null;
 
     public function __construct(
         #[ORM\Column(length: 255)]
