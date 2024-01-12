@@ -17,9 +17,9 @@ class Order
     private ?int $id = null;
 
     public function __construct(
-        #[ORM\ManyToOne(inversedBy: 'orders')]
+        #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'orders')]
         #[ORM\JoinColumn(nullable: false)]
-        private User $user,
+        private ?User $user,
 
         #[ORM\Column(length: 255)]
         private ?string $reference = null,

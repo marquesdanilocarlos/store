@@ -21,7 +21,7 @@ class User
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Address $address = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
 
     public function __construct(
