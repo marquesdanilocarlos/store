@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -14,26 +15,30 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $firstName = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $lastName = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
-
-    #[ORM\OneToOne(targetEntity: 'App\Entity\Address', mappedBy: 'user')]
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: 'App\Entity\Address')]
     private Address $address;
+
+    public function __construct(
+        #[ORM\Column(length: 255)]
+        private ?string $firstName = null,
+
+        #[ORM\Column(length: 255)]
+        private ?string $lastName = null,
+
+        #[ORM\Column(length: 255)]
+        private ?string $email = null,
+
+        #[ORM\Column(length: 255)]
+        private ?string $password = null,
+
+        #[ORM\Column]
+        private ?\DateTimeImmutable $createdAt = new \DateTimeImmutable('now'),
+
+        #[ORM\Column(nullable: true)]
+        private ?\DateTimeImmutable $updatedAt = null,
+    ) {
+    }
+
     public function getId(): ?int
     {
         return $this->id;

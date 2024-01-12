@@ -14,26 +14,35 @@ class Address
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $address = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $number = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $neighborhood = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $city = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $state = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $zipcode = null;
-
-    #[ORM\OneToOne(targetEntity: 'App\Entity\User', inversedBy: 'address')]
+    #[ORM\OneToOne(inversedBy: 'address', targetEntity: 'App\Entity\User')]
     private User $user;
+
+    public function __construct(
+        #[ORM\Column(length: 255, nullable: true)]
+        private ?string $address = null,
+
+        #[ORM\Column(nullable: true)]
+        private ?int $number = null,
+
+        #[ORM\Column(length: 255, nullable: true)]
+        private ?string $neighborhood = null,
+
+        #[ORM\Column(length: 255, nullable: true)]
+        private ?string $city = null,
+
+        #[ORM\Column(length: 255, nullable: true)]
+        private ?string $state = null,
+
+        #[ORM\Column(length: 255, nullable: true)]
+        private ?string $zipcode = null,
+
+        #[ORM\Column]
+        private ?\DateTimeImmutable $createdAt = new \DateTimeImmutable('now'),
+
+        #[ORM\Column(nullable: true)]
+        private ?\DateTimeImmutable $updatedAt = null
+    ) {
+    }
 
     public function getId(): ?int
     {
@@ -108,6 +117,42 @@ class Address
     public function setZipcode(?string $zipcode): static
     {
         $this->zipcode = $zipcode;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
