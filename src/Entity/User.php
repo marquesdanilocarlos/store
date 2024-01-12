@@ -115,4 +115,9 @@ class User
 
         return $this;
     }
+
+    public function getAddress(): Address
+    {
+        return $this->address;
+    }
 }

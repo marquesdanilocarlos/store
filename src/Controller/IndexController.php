@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,15 +14,15 @@ class IndexController extends AbstractController
 {
 
     public function __construct(
-        private EntityManagerInterface $entityManager
-    )
-    {
+        private EntityManagerInterface $entityManager,
+        private UserRepository $userRepository
+    ) {
     }
 
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {
-        $user = new User(
+        /*$user = new User(
             'Danilo',
             'Marques',
             'marquesdanilocarlos@gmail.com',
@@ -40,11 +41,12 @@ class IndexController extends AbstractController
 
         $address->setUser($user);
         $this->entityManager->persist($address);
-        $this->entityManager->flush();
+        $this->entityManager->flush();*/
 
+        $user = $this->userRepository->find(3);
 
         $name = "Danilo Marques";
-        return $this->render('index.html.twig', compact('name'));
+        return $this->render('index.html.twig', compact('name', 'user'));
     }
 
     #[Route('/product/{slug}', name: 'product_single')]
