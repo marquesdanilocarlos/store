@@ -3,18 +3,30 @@
 {% block title %}Hello ProductController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/store/src/Controller/Admin/ProductController.php'|file_link(0) }}">src/Controller/Admin/ProductController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/store/templates/admin/product/index.html.twig'|file_link(0) }}">templates/admin/product/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="row">
+        <div class="col-12">
+            <h1>Produtos</h1>
+            <hr>
+        </div>
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Criado em</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.createdAt|date('d/m/Y H:i:s') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
