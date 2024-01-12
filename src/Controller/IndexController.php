@@ -28,14 +28,11 @@ class IndexController extends AbstractController
     {
         $user = $this->userRepository->find(3);
         $orders = $user->getOrders();
-
         $product = $this->productRepository->find(2);
-        $category = new Category('Games', 'Categoria de games', 'games-jogos');
-        $product->setCategories($category);
-        $this->entityManager->flush();
+        $categories = $product->getCategories();
 
         $name = "Danilo Marques";
-        return $this->render('index.html.twig', compact('name', 'user', 'orders'));
+        return $this->render('index.html.twig', compact('name', 'user', 'orders', 'categories'));
     }
 
     #[Route('/product/{slug}', name: 'product_single')]
