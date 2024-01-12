@@ -15,8 +15,8 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(mappedBy: 'user', targetEntity: 'App\Entity\Address')]
-    private Address $address;
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Address $address = null;
 
     public function __construct(
         #[ORM\Column(length: 255)]
@@ -116,8 +116,21 @@ class User
         return $this;
     }
 
-    public function getAddress(): Address
+    public function getAddress(): ?Address
     {
         return $this->address;
+    }
+
+
+    public function setAddress(Address $address): static
+    {
+        // Necessário setar o usuário em questão no proprietário da relação (Address), para que o relacionamento na base fique correto
+        if ($address->getUser() !== $this) {
+            $address->setUser($this);
+        }
+
+        $this->address = $address;
+
+        return $this;
     }
 }

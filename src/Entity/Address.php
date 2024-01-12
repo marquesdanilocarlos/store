@@ -14,8 +14,9 @@ class Address
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'address', targetEntity: 'App\Entity\User')]
-    private User $user;
+    #[ORM\OneToOne(inversedBy: 'address', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     public function __construct(
         #[ORM\Column(length: 255, nullable: true)]
@@ -145,12 +146,12 @@ class Address
         return $this;
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(User $user): self
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
