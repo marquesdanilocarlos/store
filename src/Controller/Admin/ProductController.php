@@ -84,9 +84,15 @@ class ProductController extends AbstractController
     }
 
     #[Route('/remove/{product}', name: 'remove_products', methods: ['DELETE'])]
-    public function remove(Product $product)
+    public function remove(Product $product): RedirectResponse
     {
-        $this->entityManager->remove($product);
-        $this->entityManager->flush();
+        try {
+            $this->entityManager->remove($product);
+            $this->entityManager->flush();
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+        return $this->redirectToRoute('admin_index_products');
     }
 }

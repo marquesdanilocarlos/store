@@ -16,6 +16,7 @@
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Criado em</th>
+                    <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,6 +25,16 @@
                         <td>{{ product.id }}</td>
                         <td>{{ product.name }}</td>
                         <td>{{ product.createdAt|date('d/m/Y H:i:s') }}</td>
+                        <td class="d-flex justify-content-evenly">
+                            <a href="{{ path('admin_edit_products', {product: product.id}) }}"
+                               class="btn btn-sm btn-primary">Editar</a>
+                            <form method="post" action="{{ path('admin_remove_products', {product: product.id}) }}">
+                                <input type="hidden" name="_method" value="delete">
+                                <button class="btn btn-sm btn-danger">
+                                    Remover
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
