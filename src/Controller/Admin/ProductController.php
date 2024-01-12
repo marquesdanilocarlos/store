@@ -52,6 +52,8 @@ class ProductController extends AbstractController
 
             $this->entityManager->persist($product);
             $this->entityManager->flush();
+
+            $this->addFlash('success', 'Produto criado com sucesso!');
         } catch (Exception $e) {
             throw $e;
         }
@@ -76,6 +78,8 @@ class ProductController extends AbstractController
             $product->setPrice($data['price']);
             $product->setUpdatedAt(new \DateTimeImmutable('now'));
             $this->entityManager->flush();
+
+            $this->addFlash('success', 'Produto criado com sucesso!');
         } catch (Exception $e) {
             throw $e;
         }
@@ -89,6 +93,8 @@ class ProductController extends AbstractController
         try {
             $this->entityManager->remove($product);
             $this->entityManager->flush();
+
+            $this->addFlash('success', 'Produto criado com sucesso!');
         } catch (Exception $e) {
             throw $e;
         }
