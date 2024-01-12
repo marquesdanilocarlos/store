@@ -17,30 +17,24 @@ class Product
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'product', cascade: ['persist'])]
-    private ?Collection $categories = null;
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products', cascade: ['persist'])]
+    private Collection $categories;
 
     public function __construct(
         #[ORM\Column(length: 255)]
         private ?string $name = null,
-
         #[ORM\Column(length: 255)]
         private ?string $description = null,
-
         #[ORM\Column(type: Types::TEXT)]
         private ?string $body = null,
-
         #[ORM\Column]
         private ?int $price = null,
-
         #[ORM\Column(length: 255)]
         private ?string $slug = null,
-
         #[ORM\Column]
         private ?\DateTimeImmutable $createdAt = null,
-
         #[ORM\Column(nullable: true)]
-        private ?\DateTimeImmutable $updatedAt = null,
+        private ?\DateTimeImmutable $updatedAt = null
     ) {
         $this->categories = new ArrayCollection();
     }
@@ -134,18 +128,27 @@ class Product
         return $this;
     }
 
+    /**
+     * @return Collection<int, Category>
+     */
     public function getCategories(): Collection
     {
         return $this->categories;
     }
 
-    public function setCategories(Category $category): self
+    public function addCategory(Category $category): static
     {
-        if ($this->categories->contains($category)) {
-            return $this;
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
         }
 
-        $this->categories->add($category);
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        $this->categories->removeElement($category);
+
         return $this;
     }
 }

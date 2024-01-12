@@ -28,7 +28,7 @@ class IndexController extends AbstractController
     {
         $user = $this->userRepository->find(3);
         $orders = $user->getOrders();
-        $product = $this->productRepository->find(2);
+        $product = $this->productRepository->find(5);
         $categories = $product->getCategories();
 
         $name = "Danilo Marques";

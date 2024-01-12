@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,25 +16,22 @@ class Category
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'category')]
-    private ?Collection $products = null;
+    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'categories', cascade: ['persist'])]
+    private Collection $products;
 
     public function __construct(
         #[ORM\Column(length: 255)]
         private ?string $name = null,
-
         #[ORM\Column(length: 255, nullable: true)]
         private ?string $description = null,
-
         #[ORM\Column(length: 255)]
         private ?string $slug = null,
-
         #[ORM\Column]
         private ?\DateTimeImmutable $createdAt = new \DateTimeImmutable('now'),
-
         #[ORM\Column(nullable: true)]
-        private ?\DateTimeImmutable $updatedAt = null,
+        private ?\DateTimeImmutable $updatedAt = null
     ) {
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,6 +95,33 @@ class Category
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            $product->removeCategory($this);
+        }
 
         return $this;
     }
