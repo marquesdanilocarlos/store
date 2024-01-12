@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,8 +17,8 @@ class Product
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'product')]
-    private ?Category $category = null;
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'product', cascade: ['persist'])]
+    private ?Collection $categories = null;
 
     public function __construct(
         #[ORM\Column(length: 255)]
@@ -40,6 +42,7 @@ class Product
         #[ORM\Column(nullable: true)]
         private ?\DateTimeImmutable $updatedAt = null,
     ) {
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,6 +131,21 @@ class Product
     {
         $this->updatedAt = $updatedAt;
 
+        return $this;
+    }
+
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function setCategories(Category $category): self
+    {
+        if ($this->categories->contains($category)) {
+            return $this;
+        }
+
+        $this->categories->add($category);
         return $this;
     }
 }
