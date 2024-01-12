@@ -16,6 +16,8 @@ framework:
     php_errors:
         log: true
 
+    http_method_override: true
+
 when@test:
     framework:
         test: true

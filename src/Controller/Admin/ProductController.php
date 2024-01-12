@@ -5,16 +5,21 @@ namespace App\Controller\Admin;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/admin/products', name: 'admin_')]
 class ProductController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private ProductRepository $productRepository
+        private ProductRepository $productRepository,
+        private SluggerInterface $slugger
     ) {
     }
 
@@ -26,38 +31,56 @@ class ProductController extends AbstractController
     }
 
     #[Route('/create', name: 'create_products', methods: ['GET'])]
-    public function create()
+    public function create(): Response
     {
+        return $this->render('admin/product/create.html.twig');
     }
 
     #[Route('/store', name: 'store_products', methods: ['POST'])]
-    public function store()
+    public function store(Request $request): RedirectResponse
     {
-        $product = new Product(
-            'Primeiro produto',
-            'Descrição do primeiro produto',
-            'Informações do primeiro produto',
-            39.90,
-            'primeiro-produto',
-            new \DateTimeImmutable('now')
-        );
+        try {
+            $data = $request->request->all();
+            $product = new Product(
+                $data['name'],
+                $data['description'],
+                $data['body'],
+                $data['price'],
+                $this->slugger->slug($data['name']),
+                new \DateTimeImmutable('now')
+            );
 
-        $this->entityManager->persist($product);
-        $this->entityManager->flush();
+            $this->entityManager->persist($product);
+            $this->entityManager->flush();
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+        return $this->redirectToRoute('admin_index_products');
     }
 
     #[Route('/edit/{product}', name: 'edit_products', methods: ['GET'])]
-    public function edit(Product $product)
+    public function edit(Product $product): Response
     {
-        //$product = $this->productRepository->find(2);
+        return $this->render('admin/product/edit.html.twig', compact('product'));
     }
 
     #[Route('/update/{product}', name: 'update_products', methods: ['PUT'])]
-    public function update(Product $product)
+    public function update(Product $product, Request $request): RedirectResponse
     {
-        $product->setName('Primeiro produto com nome atualizado');
-        $product->setUpdatedAt(new \DateTimeImmutable('now'));
-        $this->entityManager->flush();
+        try {
+            $data = $request->request->all();
+            $product->setName($data['name']);
+            $product->setDescription($data['description']);
+            $product->setBody($data['body']);
+            $product->setPrice($data['price']);
+            $product->setUpdatedAt(new \DateTimeImmutable('now'));
+            $this->entityManager->flush();
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+        return $this->redirectToRoute('admin_edit_products', ['product' => $product->getId()]);
     }
 
     #[Route('/remove/{product}', name: 'remove_products', methods: ['DELETE'])]
