@@ -76,7 +76,7 @@ class ProductController extends AbstractController
             }
 
             $this->entityManager->flush();
-            $this->addFlash('success', 'Produto criado com sucesso!');
+            $this->addFlash('success', 'Produto editado com sucesso!');
         } catch (Exception $e) {
             throw $e;
         }

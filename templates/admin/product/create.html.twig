@@ -9,9 +9,7 @@
             <hr>
         </div>
         <div class="col-12">
-            {{ form_start(productForm, {'attr': {'novalidate': 'novalidate'}}) }}
-            {{ form_widget(productForm) }}
-            {{ form_end(productForm) }}
+           {% include 'admin/product/_form.html.twig' %}
         </div>
     </div>
 {% endblock %}
