@@ -27,7 +27,7 @@ create_products:
 
 store_products:
   prefix: '/admin/products'
-  path: '/store'
+  path: '/create'
   controller: App\Controller\ProductsController::store
   methods: POST
 
@@ -39,7 +39,7 @@ edit_products:
 
 update_products:
   prefix: '/admin/products'
-  path: '/update/{product}'
+  path: '/edit/{product}'
   controller: App\Controller\ProductsController::update
   methods: PUT
 

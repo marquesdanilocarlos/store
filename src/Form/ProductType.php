@@ -9,7 +9,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ProductType extends AbstractType
@@ -23,7 +22,6 @@ class ProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->setAction($this->urlGenerator->generate('admin_store_products'))
             ->add('name')
             ->add('description')
             ->add('body')
@@ -35,12 +33,15 @@ class ProductType extends AbstractType
                 'multiple' => true,
             ])
             ->add('save', SubmitType::class, ['label' => 'Salvar']);
+
+        $builder->setMethod($options['isEdit'] ? 'PUT' : 'POST');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Product::class,
+            'isEdit' => false
         ]);
     }
 }

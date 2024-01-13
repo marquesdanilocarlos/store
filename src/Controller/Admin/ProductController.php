@@ -38,7 +38,7 @@ class ProductController extends AbstractController
         return $this->render('admin/product/create.html.twig', compact('productForm'));
     }
 
-    #[Route('/store', name: 'store_products', methods: ['POST'])]
+    #[Route('/create', name: 'store_products', methods: ['POST'])]
     public function store(Request $request): Response
     {
         try {
@@ -62,21 +62,22 @@ class ProductController extends AbstractController
     #[Route('/edit/{product}', name: 'edit_products', methods: ['GET'])]
     public function edit(Product $product): Response
     {
-        return $this->render('admin/product/edit.html.twig', compact('product'));
+        $productForm = $this->createForm(ProductType::class, $product, ['isEdit' => true]);
+        return $this->render('admin/product/edit.html.twig', compact('productForm'));
     }
 
-    #[Route('/update/{product}', name: 'update_products', methods: ['PUT'])]
-    public function update(Product $product, Request $request): RedirectResponse
+    #[Route('/edit/{product}', name: 'update_products', methods: ['PUT'])]
+    public function update(Product $product, Request $request): Response
     {
         try {
-            $data = $request->request->all();
-            $product->setName($data['name']);
-            $product->setDescription($data['description']);
-            $product->setBody($data['body']);
-            $product->setPrice($data['price']);
-            $product->setUpdatedAt(new \DateTimeImmutable('now'));
-            $this->entityManager->flush();
+            $productForm = $this->createForm(ProductType::class, $product, ['isEdit' => true]);
+            $productForm->handleRequest($request);
 
+            if (!$productForm->isSubmitted()) {
+                return $this->render('admin/product/edit.html.twig', compact('productForm'));
+            }
+
+            $this->entityManager->flush();
             $this->addFlash('success', 'Produto criado com sucesso!');
         } catch (Exception $e) {
             throw $e;
