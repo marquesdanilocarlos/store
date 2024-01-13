@@ -11,6 +11,10 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        #Também é permitido passar o bind para tipar o valor do parâmtro, para todos os serviços que contenham esse
+        #parâmetro definido
+        #bind:
+        #   'bool $hasLog': false
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -26,8 +30,11 @@ services:
 
     #Nome do serviço
     App\Service\UploadService:
-        arguments:
+        autowire: false
+        bind:
             '$uploadDir': '%upload_dir%'
+            'bool $hasLog': true
+            'Psr\Log\LoggerInterface $logger': '@monolog.logger'
 
 
     #apelido do serviço
