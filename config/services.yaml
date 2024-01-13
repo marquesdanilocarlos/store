@@ -29,17 +29,22 @@ services:
     # please note that last definitions always *replace* previous ones
 
     #Nome do serviço
-    App\Service\UploadService:
-        autowire: false
-        bind:
-            '$uploadDir': '%upload_dir%'
-            'bool $hasLog': true
-            'Psr\Log\LoggerInterface $logger': '@monolog.logger'
-
+    #App\Service\UploadService:
+    #    autowire: false
+    #    bind:
+    #        '$uploadDir': '%upload_dir%'
+    #        'bool $hasLog': true
+    #        'Psr\Log\LoggerInterface $logger': '@monolog.logger'
 
     #apelido do serviço
     app.uploader:
-        alias: 'App\Service\UploadService'
-        #class: App\Service\UploadService
+        class: 'App\Service\UploadService'
+        bind:
+            string $uploadDir: '%upload_dir%'
+            bool $hasLog: true
+        #alias: 'App\Service\UploadService'
         #Define se o serviço é acessado diretamente pelo container ($container->get())
         public: true
+
+    App\Service\UploadService: '@app.uploader'
+
