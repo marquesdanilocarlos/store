@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    upload_dir: '%kernel.project_dir%/uploads'
 
 services:
     # default configuration for services in *this* file
@@ -23,8 +24,15 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    #Nome do serviço
+    App\Service\UploadService:
+        arguments:
+            '$uploadDir': '%upload_dir%'
+
+
     #apelido do serviço
-    uploader:
-        class: App\Service\UploadService
+    app.uploader:
+        alias: 'App\Service\UploadService'
+        #class: App\Service\UploadService
         #Define se o serviço é acessado diretamente pelo container ($container->get())
         public: true

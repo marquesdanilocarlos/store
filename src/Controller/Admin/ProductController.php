@@ -29,6 +29,7 @@ class ProductController extends AbstractController
     {
         //$uploader = $this->container->get('uploader');
         dump($this->uploader->upload());
+        dump($this->getParameter('upload_dir'));
 
         $products = $this->productRepository->findAll();
         return $this->render('admin/product/index.html.twig', compact('products'));
