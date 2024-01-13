@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/admin/products', name: 'admin_')]
 class ProductController extends AbstractController
@@ -20,7 +19,6 @@ class ProductController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ProductRepository $productRepository,
-        private SluggerInterface $slugger
     ) {
     }
 
@@ -45,7 +43,7 @@ class ProductController extends AbstractController
             $productForm = $this->createForm(ProductType::class);
             $productForm->handleRequest($request);
 
-            if (!$productForm->isSubmitted()) {
+            if (!$productForm->isSubmitted() || !$productForm->isValid()) {
                 return $this->render('admin/product/create.html.twig', compact('productForm'));
             }
 

@@ -3,11 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\Table(name: "products")]
@@ -23,17 +23,29 @@ class Product
 
     public function __construct(
         #[ORM\Column(length: 255)]
+        #[Assert\NotBlank]
         private ?string $name = null,
+
         #[ORM\Column(length: 255)]
+        #[Assert\NotBlank]
         private ?string $description = null,
+
         #[ORM\Column(type: Types::TEXT)]
+        #[Assert\NotBlank]
+        #[Assert\Length(min: 30, minMessage: 'Este campo deve possuir no mínimo 30 caracteres.')]
         private ?string $body = null,
+
         #[ORM\Column]
+        #[Assert\NotBlank]
         private ?int $price = null,
+
         #[ORM\Column(length: 255)]
+        #[Assert\NotBlank]
         private ?string $slug = null,
+
         #[ORM\Column]
         private ?\DateTimeImmutable $createdAt = new \DateTimeImmutable(),
+
         #[ORM\Column(nullable: true)]
         private ?\DateTimeImmutable $updatedAt = null
     ) {
