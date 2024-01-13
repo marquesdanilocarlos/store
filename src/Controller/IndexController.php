@@ -17,7 +17,6 @@ class IndexController extends AbstractController
 {
 
     public function __construct(
-        private EntityManagerInterface $entityManager,
         private UserRepository $userRepository,
         private ProductRepository $productRepository
     ) {

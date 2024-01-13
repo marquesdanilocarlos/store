@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use App\Service\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,12 +20,16 @@ class ProductController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ProductRepository $productRepository,
+        private UploadService $uploader
     ) {
     }
 
     #[Route('/', name: 'index_products', methods: ['GET'])]
     public function index(): Response
     {
+        //$uploader = $this->container->get('uploader');
+        dump($this->uploader->upload());
+
         $products = $this->productRepository->findAll();
         return $this->render('admin/product/index.html.twig', compact('products'));
     }
