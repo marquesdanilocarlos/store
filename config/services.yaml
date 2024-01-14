@@ -39,9 +39,12 @@ services:
     #apelido do serviço
     app.uploader:
         class: 'App\Service\UploadService'
-        bind:
-            string $uploadDir: '%upload_dir%'
-            bool $hasLog: true
+        arguments:
+            $uploadDir: '%upload_dir%'
+            $hasLog: true
+            #Definição de qual serviço será passado para o argumento "$logger", já que muitos serviços implementam a
+            #LoggerInterface
+            $logger: '@monolog.logger.event'
         #alias: 'App\Service\UploadService'
         #Define se o serviço é acessado diretamente pelo container ($container->get())
         public: true
