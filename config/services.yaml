@@ -36,6 +36,7 @@ services:
     #        'bool $hasLog': true
     #        'Psr\Log\LoggerInterface $logger': '@monolog.logger'
 
+    App\Service\UploadService: '@app.uploader'
     #apelido do serviço
     app.uploader:
         class: 'App\Service\UploadService'
@@ -49,5 +50,11 @@ services:
         #Define se o serviço é acessado diretamente pelo container ($container->get())
         public: true
 
-    App\Service\UploadService: '@app.uploader'
+    #app.exception.listener:
+    #  class: App\EventListener\ExceptionListener
+    #  tags: [kernel.event_listener]
+
+    app.exception.subscriber:
+        class: App\EventSubscriber\ExceptionSubscriber
+        tags: [kernel.event_subscriber]
 
