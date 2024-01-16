@@ -9,12 +9,10 @@ use App\Service\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/admin/products', name: 'admin_')]
 class ProductController extends AbstractController
@@ -22,8 +20,7 @@ class ProductController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ProductRepository $productRepository,
-        private UploadService $uploader,
-        private SluggerInterface $slugger
+        private UploadService $uploader
     ) {
     }
 
@@ -112,17 +109,8 @@ class ProductController extends AbstractController
     public function upload(Request $request)
     {
         $photos = $request->files->get('photos');
-        $uploadDir = $this->getParameter('upload_dir') . "/products";
+        $this->uploader->upload($photos, 'products');
 
-        foreach ($photos as $photo) {
-            /**
-             * @var UploadedFile $photo ;
-             */
-            $originalFilename = $photo->getClientOriginalName();
-            $safeFilename = $this->slugger->slug($originalFilename);
-            $newFilename = $safeFilename . '-' . uniqid() . '.' . $photo->guessExtension();
-            $photo->move($uploadDir, $newFilename);
-        }
         return new Response('Upload...');
     }
 }

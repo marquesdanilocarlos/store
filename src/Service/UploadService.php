@@ -3,27 +3,40 @@
 namespace App\Service;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UploadService
 {
 
     public function __construct(
         private string $uploadDir,
-        private bool $hasLog,
-        private LoggerInterface $logger
+        private SluggerInterface $slugger
     ) {
     }
 
-    public function upload()
+    public function upload($files, $targetFolder = ''): void
     {
-        dump($this->logger);
+        $uploadDir = "{$this->uploadDir}/{$targetFolder}";
 
-        if ($this->hasLog) {
-            $this->logger->info('Log vindo da classe de UPLOAD SERVICE');
+        if (is_array($files)) {
+            foreach ($files as $file) {
+                /**
+                 * @var UploadedFile $file ;
+                 */
+                $file->move($uploadDir, $this->createNewName($file));
+            }
+            return;
         }
 
-        $hasLog = $this->hasLog ? 'Sim' : 'Não';
-        return "Realização de upload para: {$this->uploadDir}, Tem log? {$hasLog}";
+        $files->move($uploadDir, $this->createNewName($files));
+    }
+
+    private function createNewName(UploadedFile $photo): string
+    {
+        $originalFilename = $photo->getClientOriginalName();
+        $safeFilename = $this->slugger->slug($originalFilename);
+        return $safeFilename . '-' . uniqid() . '.' . $photo->guessExtension();
     }
 
 }
