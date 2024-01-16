@@ -18,6 +18,10 @@ framework:
 
     http_method_override: true
 
+    validation:
+        auto_mapping:
+            'App\Entity\': []
+
 when@test:
     framework:
         test: true
