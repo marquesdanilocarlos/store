@@ -3,16 +3,18 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
+use App\Event\ProductCreated;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Service\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/admin/products', name: 'admin_')]
 class ProductController extends AbstractController
@@ -27,10 +29,6 @@ class ProductController extends AbstractController
     #[Route('/', name: 'index_products', methods: ['GET'])]
     public function index(): Response
     {
-        //$uploader = $this->container->get('uploader');
-        dump($this->uploader->upload());
-        dump($this->getParameter('upload_dir'));
-
         $products = $this->productRepository->findAll();
         return $this->render('admin/product/index.html.twig', compact('products'));
     }
@@ -56,6 +54,12 @@ class ProductController extends AbstractController
             $product = $productForm->getData();
             $this->entityManager->persist($product);
             $this->entityManager->flush();
+
+            $dispatcher = new EventDispatcher();
+            $event = new ProductCreated($product);
+            $dispatcher->dispatch($event, ProductCreated::NAME);
+
+
         } catch (Exception $e) {
             throw $e;
         }

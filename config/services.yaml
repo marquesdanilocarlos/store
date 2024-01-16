@@ -57,7 +57,7 @@ services:
   #  class: App\EventListener\ExceptionListener
   #  tags: [kernel.event_listener]
 
-  #app.exception.subscriber:
-  #    class: App\EventSubscriber\ExceptionSubscriber
-  #    tags: [kernel.event_subscriber]
+  app.product.subscriber:
+    class: App\EventSubscriber\ProductSubscriber
+    tags: [ kernel.event_subscriber ]
 
