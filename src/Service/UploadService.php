@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -11,7 +12,8 @@ class UploadService
 
     public function __construct(
         private string $uploadDir,
-        private SluggerInterface $slugger
+        private SluggerInterface $slugger,
+        private Filesystem $filesystem
     ) {
     }
 
@@ -46,6 +48,15 @@ class UploadService
         $file->move($uploadDir, $newName);
 
         return $newName;
+    }
+
+    public function remove(string $fileName): void
+    {
+        if (!$this->filesystem->exists($fileName)) {
+            return;
+        }
+
+        $this->filesystem->remove($fileName);
     }
 
 }

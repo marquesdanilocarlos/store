@@ -48,3 +48,9 @@ remove_products:
   path: '/remove/{product}'
   controller: App\Controller\ProductsController::remove
   methods: DELETE
+
+product_photo_remove:
+  prefix: '/admin/products'
+  path: '/photo/{productPhoto}'
+  controller: App\Controller\ProductPhotoController::remove
+  methods: DELETE
