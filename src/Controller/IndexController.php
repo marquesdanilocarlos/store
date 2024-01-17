@@ -18,20 +18,16 @@ class IndexController extends AbstractController
 
     public function __construct(
         private UserRepository $userRepository,
-        private ProductRepository $productRepository
+        private ProductRepository $productRepository,
+        private EntityManagerInterface $em
     ) {
     }
 
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {
-        $user = $this->userRepository->find(3);
-        $orders = $user->getOrders();
-        $product = $this->productRepository->find(5);
-        $categories = $product->getCategories();
-
-        $name = "Danilo Marques";
-        return $this->render('index.html.twig', compact('name', 'user', 'orders', 'categories'));
+        $user = $this->getUser();
+        return $this->render('index.html.twig', compact('user'));
     }
 
     #[Route('/product/{slug}', name: 'product_single')]

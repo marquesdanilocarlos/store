@@ -1,17 +1,5 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Hello {{ name }}!</h1>
-    <hr>
-
-    <h2>Endereço de {{ user.firstName }}
-        : {{ user.address.address }} {{ user.address.number }} {{ user.address.neighborhood }}
-        - {{ user.address.zipcode }}</h2>
-    <hr>
-    <h2>Compras</h2>
-    <ul class="list-group list-unstyled">
-        {% for order in orders %}
-            <li class="list-group-item">{{ order.reference }}</li>
-        {% endfor %}
-    </ul>
+    <h1>Hello {{ user.firstName }}!</h1>
 {% endblock %}
