@@ -4,17 +4,17 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use NumberFormatter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\Image;
 
 class ProductType extends AbstractType
 {
@@ -29,7 +29,15 @@ class ProductType extends AbstractType
             ->add(
                 'photos',
                 FileType::class,
-                ['required' => false, 'label' => 'Fotos:', 'mapped' => false, 'multiple' => true]
+                [
+                    'required' => false,
+                    'label' => 'Fotos:',
+                    'mapped' => false,
+                    'multiple' => true,
+                    'constraints' => [
+                        new All(['constraints' => new Image()])
+                    ]
+                ]
             )
             ->add('categories', EntityType::class, [
                 'class' => Category::class,
