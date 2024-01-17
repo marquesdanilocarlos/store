@@ -57,14 +57,11 @@ class ProductController extends AbstractController
 
             if ($photos) {
                 $photos = $this->uploader->upload($photos, 'products');
-
-                foreach ($photos as $photo) {
-                    $productPhoto = new ProductPhoto($photo);
-                    /**
-                     * @var Product $product
-                     */
-                    $product->addProductPhoto($productPhoto);
-                }
+                $photos = $this->createProductPhotos($photos);
+                /**
+                 * @var Product $product
+                 */
+                $product->addManyProductPhotos($photos);
             }
 
             $this->entityManager->persist($product);
@@ -98,6 +95,16 @@ class ProductController extends AbstractController
                 return $this->render('admin/product/edit.html.twig', compact('productForm'));
             }
 
+            $photos = $productForm->get('photos')->getData();
+            if ($photos) {
+                $photos = $this->uploader->upload($photos, 'products');
+                $photos = $this->createProductPhotos($photos);
+                /**
+                 * @var Product $product
+                 */
+                $product->addManyProductPhotos($photos);
+            }
+
             $this->entityManager->flush();
             $this->addFlash('success', 'Produto editado com sucesso!');
         } catch (Exception $e) {
@@ -129,5 +136,14 @@ class ProductController extends AbstractController
         $this->uploader->upload($photos, 'products');
 
         return new Response('Upload...');
+    }
+
+    private function createProductPhotos(array $photos): array
+    {
+        $newProductPhotos = [];
+        foreach ($photos as $photo) {
+            $newProductPhotos[] = new ProductPhoto($photo);
+        }
+        return $newProductPhotos;
     }
 }

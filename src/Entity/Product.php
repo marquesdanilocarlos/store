@@ -198,4 +198,12 @@ class Product
 
         return $this;
     }
+
+    public function addManyProductPhotos(array $productPhotos): self
+    {
+        foreach ($productPhotos as $productPhoto) {
+            $this->addProductPhoto($productPhoto);
+        }
+        return $this;
+    }
 }
