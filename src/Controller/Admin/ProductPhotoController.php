@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\ProductPhoto;
 use App\Service\UploadService;
@@ -30,7 +30,7 @@ class ProductPhotoController extends AbstractController
 
             $this->uploader->remove($photoFile);
 
-            return $this->redirectToRoute('admin_edit_products', ['product' => $productPhoto->getProduct()->getId()]);
+            return $this->redirectToRoute('admin_products_edit', ['product' => $productPhoto->getProduct()->getId()]);
         } catch (Exception $e) {
             throw $e;
         }

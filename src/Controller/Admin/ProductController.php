@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/admin/products', name: 'admin_')]
+#[Route('/admin/products', name: 'admin_products_')]
 class ProductController extends AbstractController
 {
     public function __construct(
@@ -27,21 +27,21 @@ class ProductController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'index_products', methods: ['GET'])]
+    #[Route('/', name: 'index', methods: ['GET'])]
     public function index(): Response
     {
         $products = $this->productRepository->findAll();
         return $this->render('admin/product/index.html.twig', compact('products'));
     }
 
-    #[Route('/create', name: 'create_products', methods: ['GET'])]
+    #[Route('/create', name: 'create', methods: ['GET'])]
     public function create(Request $request): Response
     {
         $productForm = $this->createForm(ProductType::class);
         return $this->render('admin/product/create.html.twig', compact('productForm'));
     }
 
-    #[Route('/create', name: 'store_products', methods: ['POST'])]
+    #[Route('/create', name: 'store', methods: ['POST'])]
     public function store(Request $request): Response
     {
         try {
@@ -74,10 +74,10 @@ class ProductController extends AbstractController
             throw $e;
         }
         $this->addFlash('success', 'Produto criado com sucesso!');
-        return $this->redirectToRoute('admin_index_products');
+        return $this->redirectToRoute('admin_products_index');
     }
 
-    #[Route('/edit/{product}', name: 'edit_products', methods: ['GET'])]
+    #[Route('/edit/{product}', name: 'edit', methods: ['GET'])]
     public function edit(Product $product): Response
     {
         $productForm = $this->createForm(ProductType::class, $product, ['isEdit' => true]);
@@ -87,7 +87,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/edit/{product}', name: 'update_products', methods: ['PUT'])]
+    #[Route('/edit/{product}', name: 'update', methods: ['PUT'])]
     public function update(Product $product, Request $request): Response
     {
         try {
@@ -114,10 +114,10 @@ class ProductController extends AbstractController
             throw $e;
         }
 
-        return $this->redirectToRoute('admin_edit_products', ['product' => $product->getId()]);
+        return $this->redirectToRoute('admin_products_edit', ['product' => $product->getId()]);
     }
 
-    #[Route('/remove/{product}', name: 'remove_products', methods: ['DELETE'])]
+    #[Route('/remove/{product}', name: 'remove', methods: ['DELETE'])]
     public function remove(Product $product): RedirectResponse
     {
         try {
@@ -129,10 +129,10 @@ class ProductController extends AbstractController
             throw $e;
         }
 
-        return $this->redirectToRoute('admin_index_products');
+        return $this->redirectToRoute('admin_products_index');
     }
 
-    #[Route('/upload', methods: ['POST'])]
+    #[Route('/upload', name:'upload', methods: ['POST'])]
     public function upload(Request $request)
     {
         $photos = $request->files->get('photos');
