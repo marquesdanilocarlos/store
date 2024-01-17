@@ -11,5 +11,16 @@
         <div class="col-12">
             {% include 'admin/product/_form.html.twig' %}
         </div>
+        <div class="col-12 mt-5">
+            <h3>Imagens do Produto</h3>
+            <hr>
+            <div class="row">
+                {% for photo in productPhotos %}
+                    <div class="col-4 mb-3">
+                        <img class="img-fluid" src="{{ '/uploads/products/'~photo.photo }}" alt="{{ photo.photo }}"/>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock %}

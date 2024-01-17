@@ -81,7 +81,10 @@ class ProductController extends AbstractController
     public function edit(Product $product): Response
     {
         $productForm = $this->createForm(ProductType::class, $product, ['isEdit' => true]);
-        return $this->render('admin/product/edit.html.twig', compact('productForm'));
+        return $this->render('admin/product/edit.html.twig', [
+            'productForm' => $productForm,
+            'productPhotos' => $product->getProductPhotos()
+        ]);
     }
 
     #[Route('/edit/{product}', name: 'update_products', methods: ['PUT'])]
