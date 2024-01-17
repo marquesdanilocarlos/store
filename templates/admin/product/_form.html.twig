@@ -1,22 +1,14 @@
-<form action="/admin/products/upload" method="post" enctype="multipart/form-data">
-    <div>
-        <label for="photos">Escolha as fotos do produto:</label>
-        <input type="file" name="photos[]" multiple>
-        <button class="btn btn-lg btn-success">Enviar</button>
-    </div>
-</form>
-
-
 {{ form_start(productForm) }}
-    <div class="mb-3">
-        {{ form_label(productForm.name) }}
-        {{ form_widget(productForm.name) }}
-        {{ form_help(productForm.name) }}
-    </div>
-    {{ form_row(productForm.description) }}
+<div class="mb-3">
+    {{ form_label(productForm.name) }}
+    {{ form_widget(productForm.name) }}
+    {{ form_help(productForm.name) }}
+</div>
+{{ form_row(productForm.description) }}
     {{ form_row(productForm.body) }}
     {{ form_row(productForm.price) }}
     {{ form_row(productForm.slug) }}
+    {{ form_row(productForm.photos) }}
     {{ form_row(productForm.categories) }}
     {{ form_row(productForm.save) }}
 {{ form_end(productForm) }}

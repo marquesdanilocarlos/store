@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
+use App\Entity\ProductPhoto;
 use App\Event\ProductCreated;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
@@ -52,14 +53,26 @@ class ProductController extends AbstractController
             }
 
             $product = $productForm->getData();
+            $photos = $productForm->get('photos')->getData();
+
+            if ($photos) {
+                $photos = $this->uploader->upload($photos, 'products');
+
+                foreach ($photos as $photo) {
+                    $productPhoto = new ProductPhoto($photo);
+                    /**
+                     * @var Product $product
+                     */
+                    $product->addProductPhoto($productPhoto);
+                }
+            }
+
             $this->entityManager->persist($product);
             $this->entityManager->flush();
 
             $dispatcher = new EventDispatcher();
             $event = new ProductCreated($product);
             $dispatcher->dispatch($event, ProductCreated::NAME);
-
-
         } catch (Exception $e) {
             throw $e;
         }

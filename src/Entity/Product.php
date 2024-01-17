@@ -21,7 +21,7 @@ class Product
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products', cascade: ['persist'])]
     private Collection $categories;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductPhoto::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductPhoto::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $productPhotos;
 
     public function __construct(

@@ -9,22 +9,28 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'product_photos')]
 class ProductPhoto
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $photo = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
-
-    #[ORM\ManyToOne(inversedBy: 'productPhotos')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'productPhotos')]
     private ?Product $product = null;
+
+
+    public function __construct(
+        #[ORM\Column(length: 255)]
+        private ?string $photo = null,
+
+        #[ORM\Column]
+        private ?\DateTimeImmutable $createdAt = new \DateTimeImmutable('now'),
+
+        #[ORM\Column(nullable: true)]
+        private ?\DateTimeImmutable $updatedAt = null
+    )
+    {
+    }
 
     public function getId(): ?int
     {
