@@ -7,11 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\Table(name: 'categories')]
 class Category
 {
+    use TimestampableEntity;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -29,13 +31,7 @@ class Category
 
         #[ORM\Column(length: 255)]
         #[Gedmo\Slug(fields: ['name'])]
-        private ?string $slug = null,
-
-        #[ORM\Column]
-        private ?\DateTimeImmutable $createdAt = new \DateTimeImmutable('now'),
-
-        #[ORM\Column(nullable: true)]
-        private ?\DateTimeImmutable $updatedAt = null
+        private ?string $slug = null
     ) {
         $this->products = new ArrayCollection();
     }

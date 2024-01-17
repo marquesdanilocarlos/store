@@ -8,12 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\Table(name: "products")]
 class Product
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -45,13 +48,7 @@ class Product
 
         #[ORM\Column(length: 255)]
         #[Gedmo\Slug(fields: ['name'])]
-        private ?string $slug = null,
-
-        #[ORM\Column]
-        private ?\DateTimeImmutable $createdAt = new \DateTimeImmutable(),
-
-        #[ORM\Column(nullable: true)]
-        private ?\DateTimeImmutable $updatedAt = null
+        private ?string $slug = null
     ) {
         $this->categories = new ArrayCollection();
         $this->productPhotos = new ArrayCollection();

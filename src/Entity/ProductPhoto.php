@@ -4,11 +4,13 @@ namespace App\Entity;
 
 use App\Repository\ProductPhotoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: ProductPhotoRepository::class)]
 #[ORM\Table(name: 'product_photos')]
 class ProductPhoto
 {
+    use TimestampableEntity;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,15 +23,8 @@ class ProductPhoto
 
     public function __construct(
         #[ORM\Column(length: 255)]
-        private ?string $photo = null,
-
-        #[ORM\Column]
-        private ?\DateTimeImmutable $createdAt = new \DateTimeImmutable('now'),
-
-        #[ORM\Column(nullable: true)]
-        private ?\DateTimeImmutable $updatedAt = null
-    )
-    {
+        private ?string $photo = null
+    ) {
     }
 
     public function getId(): ?int

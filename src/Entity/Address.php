@@ -4,11 +4,14 @@ namespace App\Entity;
 
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 #[ORM\Table(name: 'addresses')]
 class Address
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -35,13 +38,7 @@ class Address
         private ?string $state = null,
 
         #[ORM\Column(length: 255, nullable: true)]
-        private ?string $zipcode = null,
-
-        #[ORM\Column]
-        private ?\DateTimeImmutable $createdAt = new \DateTimeImmutable('now'),
-
-        #[ORM\Column(nullable: true)]
-        private ?\DateTimeImmutable $updatedAt = null
+        private ?string $zipcode = null
     ) {
     }
 
