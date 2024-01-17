@@ -6,7 +6,7 @@
 </div>
 {{ form_row(productForm.description) }}
     {{ form_row(productForm.body) }}
-    {{ form_row(productForm.price) }}
+    {{ form_row(productForm.price, {'attr': {'class': 'price'}}) }}
     {{ form_row(productForm.photos) }}
     {{ form_row(productForm.categories) }}
     {{ form_row(productForm.save) }}

@@ -4,8 +4,10 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use NumberFormatter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -39,6 +41,21 @@ class ProductType extends AbstractType
             ->add('save', SubmitType::class, ['label' => 'Salvar']);
 
         $builder->setMethod($options['isEdit'] ? 'PUT' : 'POST');
+
+        $builder->get('price')->addModelTransformer(
+            new CallbackTransformer(
+                function ($price) {
+                    $price = $price / 100;
+                    return number_format($price, 2, ',', '.');
+                },
+                function ($price) {
+                    $price = floatval(str_replace(['.', ','], ['', '.'], $price));
+                    $price = $price * 100;
+                    $price = intval($price);
+                    return $price;
+                }
+            )
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
