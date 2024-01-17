@@ -6,6 +6,7 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\Table(name: 'categories')]
@@ -22,12 +23,17 @@ class Category
     public function __construct(
         #[ORM\Column(length: 255)]
         private ?string $name = null,
+
         #[ORM\Column(length: 255, nullable: true)]
         private ?string $description = null,
+
         #[ORM\Column(length: 255)]
+        #[Gedmo\Slug(fields: ['name'])]
         private ?string $slug = null,
+
         #[ORM\Column]
         private ?\DateTimeImmutable $createdAt = new \DateTimeImmutable('now'),
+
         #[ORM\Column(nullable: true)]
         private ?\DateTimeImmutable $updatedAt = null
     ) {

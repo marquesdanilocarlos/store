@@ -24,7 +24,6 @@ class ProductType extends AbstractType
             ->add('description', TextType::class, ['label' => 'Descrição:'])
             ->add('body', TextareaType::class, ['label' => 'Conteúdo:'])
             ->add('price', TextType::class, ['label' => 'Preço:'])
-            ->add('slug', TextType::class, ['label' => 'Slug:'])
             ->add('photos', FileType::class, ['label' => 'Fotos:', 'mapped' => false, 'multiple' => true])
             ->add('categories', EntityType::class, [
                 'class' => Category::class,
