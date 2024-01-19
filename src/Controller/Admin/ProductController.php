@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/products', name: 'admin_products_')]
 class ProductController extends AbstractController
@@ -28,6 +29,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
+    //#[IsGranted('ROLE_USER')]
     public function index(): Response
     {
         $products = $this->productRepository->findAll();
@@ -37,6 +39,7 @@ class ProductController extends AbstractController
     #[Route('/create', name: 'create', methods: ['GET'])]
     public function create(Request $request): Response
     {
+        //$this->denyAccessUnlessGranted('ROLE_USER');
         $productForm = $this->createForm(ProductType::class);
         return $this->render('admin/product/create.html.twig', compact('productForm'));
     }
@@ -132,7 +135,7 @@ class ProductController extends AbstractController
         return $this->redirectToRoute('admin_products_index');
     }
 
-    #[Route('/upload', name:'upload', methods: ['POST'])]
+    #[Route('/upload', name: 'upload', methods: ['POST'])]
     public function upload(Request $request)
     {
         $photos = $request->files->get('photos');
